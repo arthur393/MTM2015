@@ -227,6 +227,8 @@ int main()
        printf("%d:%d; ",p1Score,p2Score);
      }
 
+     printf("Arthur Henrique's Poker Program\n\n");	
+
      if (chooseWinner(&p1SortedValues[0],p1Score,
                       &p2SortedValues[0],p2Score) == 1)
      {            /* If player 1 is the winner, display an          */

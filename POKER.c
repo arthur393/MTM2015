@@ -158,6 +158,10 @@ int main()
 /********************************************************************/
   int i;
   char c;
+  int total = 0;
+  int totalP1 = 0;
+  int totalP2 = 0;
+
 
 /********************************************************************/
 /* Now that we're done defining prototypes and variables, let's get */
@@ -228,6 +232,8 @@ int main()
      }
 
      printf("Arthur Henrique's Poker Program\n\n");	
+       
+     total +=1;
 
      if (chooseWinner(&p1SortedValues[0],p1Score,
                       &p2SortedValues[0],p2Score) == 1)
@@ -238,11 +244,14 @@ int main()
                   /* players is the winner and returning a value    */
                   /* of zero if the second of the two players is the*/
                   /* winner.                                        */
-       printf("Player 1 wins!\n");
+       //printf("Player 1 wins!\n");
+       totalP1 +=1;
      }
      else
      {
-       printf("Player 2 wins!\n");
+
+       //printf("Player 2 wins!\n");
+       totalP2 +=1;
      }
 
      /* The following code (which is all commented out for now)     */
@@ -308,6 +317,12 @@ int main()
       c = fgetc(inputFile);
     } while ( c != '\n');
   }               /* End of loop that processes each record         */
+
+
+     printf("Summary: \n Total games: %d \n", total)	
+     printf("Player 1 total wins: %d Percentage %d% \n", totalP1, totalP1/total * 100);
+     printf("Player 2 total wins: %d Percentege %d% \n", totalP2, totalP2/total * 100);
+
 
 /********************************************************************/
 /*     Close input file                                             */

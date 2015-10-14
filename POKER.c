@@ -106,6 +106,20 @@
  int p1Score;
  int p2Score;
 
+/********************************************************************/
+/* Global counter to Summary                                        */
+/********************************************************************/
+ int totalHand          = 0;
+ int totalRoyalFlush    = 0;
+ int totalStraightFlush = 0;
+ int totalFourKind      = 0;
+ int totalFullHouse     = 0;
+ int totalFlush         = 0;
+ int ttlStraight        = 0;
+ int totalThreeKind     = 0;
+ int totalTwoPair       = 0;
+ int totalOnePair       = 0;
+ int totalHigh          = 0;
 
 /********************************************************************/
 /* The following enumerations are used to match up named constants  */
@@ -129,7 +143,7 @@
        QUEEN, KING, ACE};
 
  enum {HIGHCARD=0, ONEPAIR, TWOPAIR, THREEKIND, STRAIGHT, FLUSH,
-       FULLHOUSE, FOURKIND};
+       FULLHOUSE, FOURKIND, ROYAL};
 
 /********************************************************************/
 /* The function called int main() is where the code begins executing*/
@@ -145,6 +159,7 @@ int main()
 /* function itself must appear in the file prior to any invocation  */
 /* of the function.                                                 */
 /********************************************************************/
+  int isRoyal(int values[]);
   int isFlush(struct cards[]);
   int isStraight(int values[]);
   int getValue(char val);
@@ -159,9 +174,8 @@ int main()
   int i;
   char c;
   int total = 0;
-  int totalP1 = 0;
-  int totalP2 = 0;
-
+  int p1wins = 0;
+  int p2wins = 0;
 
 /********************************************************************/
 /* Now that we're done defining prototypes and variables, let's get */
@@ -204,7 +218,7 @@ int main()
                   /* equal to zero) then print some diagnostic      */
                   /* information showing what data was read in for  */
                   /* player 1's hand                                */
-       printf("Player 1: %.2s %.2s %.2s %.2s %.2s : ",
+       printf("\n\nPlayer 1: %.2s %.2s %.2s %.2s %.2s : ",
          &p1cards[0],&p1cards[1],&p1cards[2],&p1cards[3],&p1cards[4]);
      }            /* End of "if (debug)"                            */
      p1Score = scoreHand(&p1cards[0],&p1SortedValues[0]);
@@ -231,10 +245,6 @@ int main()
        printf("%d:%d; ",p1Score,p2Score);
      }
 
-     printf("Arthur Henrique's Poker Program\n\n");	
-       
-     total +=1;
-
      if (chooseWinner(&p1SortedValues[0],p1Score,
                       &p2SortedValues[0],p2Score) == 1)
      {            /* If player 1 is the winner, display an          */
@@ -244,15 +254,15 @@ int main()
                   /* players is the winner and returning a value    */
                   /* of zero if the second of the two players is the*/
                   /* winner.                                        */
-       //printf("Player 1 wins!\n");
-       totalP1 +=1;
+     /*printf("Player 1 wins!\n"); */
+      p1wins += 1;
      }
      else
      {
-
-       //printf("Player 2 wins!\n");
-       totalP2 +=1;
+     /*printf("Player 2 wins!\n");  */
+      p2wins += 1;
      }
+     total  += 1;
 
      /* The following code (which is all commented out for now)     */
      /* contains much of the code needed for the first programming  */
@@ -295,14 +305,6 @@ int main()
      /* output. When the compiler sees two % in a row (%%) it knows */
      /* that we're not giving it a format specifier like %d, but    */
      /* that we actually want a percent sign in our output!         */
-     /*
-     printf("\n\nSummary:\n");
-     printf("Total games: %d\n",total);
-     printf("Player 1 total wins: %d Percentage %d%%\n",p1wins,
-             p1wins*100/total);
-     printf("Player 2 total wins: %d Percentage %d%%\n",p2wins,
-             p2wins*100/total);
-     */
 
      /***************************************************************/
      /* Reset variables to zero before reading/processing next hand */
@@ -318,10 +320,36 @@ int main()
     } while ( c != '\n');
   }               /* End of loop that processes each record         */
 
+  printf("Arthur Henrique's Poker Program");
+  printf("\n\nSummary:\n");
+  printf("Total games: %d\n",total);
+  printf("Player 1 total wins: %d Percentage %d%%\n",p1wins,
+          p1wins*100/total);
+  printf("Player 2 total wins: %d Percentage %d%%\n",p2wins,
+          p2wins*100/total);
 
-     printf("Summary: \n Total games: %d \n", total)	
-     printf("Player 1 total wins: %d Percentage %d% \n", totalP1, totalP1/total * 100);
-     printf("Player 2 total wins: %d Percentege %d% \n", totalP2, totalP2/total * 100);
+  printf("\nHand Occurrences: \n");
+  printf("Total Hands Analyzed: %d\n",totalHand);
+  printf("Royal Flushes: %d (%d%%) \n",totalRoyalFlush,
+          totalRoyalFlush*100/totalHand);
+  printf("Straight Flushes: %d (%d%%)\n",totalStraightFlush,
+          totalStraightFlush*100/totalHand);
+  printf("Four of a Kinds: %d (%d%%) \n",totalFourKind,
+          totalFourKind*100/totalHand);
+  printf("Full Houses: %d (%d%%)\n",totalFullHouse,
+          totalFullHouse*100/totalHand);
+  printf("Flushes: %d (%d%%)\n",totalFlush,
+          totalFlush*100/totalHand);
+  printf("Straights: %d (%d%%)\n",ttlStraight,
+          ttlStraight*100/totalHand);
+  printf("Three of a Kinds: %d (%d%%)\n",totalThreeKind,
+          totalThreeKind*100/totalHand);
+  printf("Two Pairs: %d (%d%%)\n",totalTwoPair,
+          totalTwoPair*100/totalHand);
+  printf("One Pairs: %d (%d%%)\n",totalOnePair,
+          totalOnePair*100/totalHand);
+  printf("High Cards: %d (%d%%)\n",totalHigh,
+          totalHigh*100/totalHand);
 
 
 /********************************************************************/
@@ -333,7 +361,28 @@ int main()
 /********************************************************************/
   return 0;
 }
+/********************************************************************/
+/*  Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.         */
+/*  receives values[] -> return 0 or 1                              */
+/********************************************************************/
+int isRoyal(int values[])
+{
+   int i;
+   int cardCount = 0;
 
+   for (i=TEN; i <= ACE ;i++)
+   {
+      if (values[i]==1)
+    {
+      cardCount++;
+      if (cardCount==5)
+        return 1;
+      }
+      else
+      cardCount =  0;
+   }
+   return 0;
+}
 /********************************************************************/
 /*                                                                  */
 /* Subroutine isFlush returns 1 if the input hand is a Flush (all   */
@@ -609,22 +658,50 @@ int scoreHand(struct cards hand[], int sortedValues[])
   /* a flush. Note also that the hand could be a royal flush (ie    */
   /* it is a straight flush where the highest card is an ace) but   */
   /* that distinction is not (yet) made in the code.                */
-  if (isStraight(&values[0]))
+
+  totalHand++;
+
+  if (isStraight(&values[0]) && !isRoyal(&values[0]))
   {
     handVal += STRAIGHT;
     if (isFlush(&hand[0]))
     {
+      totalStraightFlush++;
+
       handVal += FLUSH;
       if (debug)
         printf("Straight Flush, high card %c",
                getPrint(sortedValues[0]));
     }
     else
+    {
+      ttlStraight++;
       if (debug)
         printf("Straight, high card %c",getPrint(sortedValues[0]));
+    }
+      
   }
+  /* Royal Flush */
+  else if (isRoyal(&values[0]))
+  {
+    if (isFlush(&hand[0]))
+    {
+      totalRoyalFlush++;
+      handVal += ROYAL;  
+      handVal += FLUSH;
+      if (debug)
+        printf("Royal Flush, high card %c",
+               getPrint(sortedValues[0]));
+    }
+    else
+      if (debug)
+        printf("No Royal, high card %c",getPrint(sortedValues[0]));
+  }
+  /* Flush */
   else if (isFlush(&hand[0]))
   {
+    totalFlush++;
+
     handVal += FLUSH;
     if (debug)
       printf("Flush, high card %c",getPrint(sortedValues[0]));
@@ -636,6 +713,8 @@ int scoreHand(struct cards hand[], int sortedValues[])
   /* clause: only one will be true                                  */
   if (frequency[0]==4)
   {
+    totalFourKind++;
+
     handVal += FOURKIND;
     if (debug)
       printf("Four of a kind %c",getPrint(sortedValues[0]));
@@ -644,6 +723,8 @@ int scoreHand(struct cards hand[], int sortedValues[])
     {
       if (frequency[1]==2)
       {
+        totalFullHouse++;
+
         handVal += FULLHOUSE;
         if (debug)
           printf("Full house %cs and %cs",getPrint(sortedValues[0]),
@@ -651,6 +732,8 @@ int scoreHand(struct cards hand[], int sortedValues[])
       }
       else
       {
+        totalThreeKind++;
+
         handVal += THREEKIND;
         if (debug)
           printf("Three of a kind %cs with a %c and a %c",
@@ -662,6 +745,8 @@ int scoreHand(struct cards hand[], int sortedValues[])
     {
       if (frequency[1]==2)
       {
+        totalTwoPair++;
+
         handVal += TWOPAIR;
         if (debug)
           printf("Two pair %cs and %cs with a %c",
@@ -670,6 +755,8 @@ int scoreHand(struct cards hand[], int sortedValues[])
       }
       else
       {
+        totalOnePair++;
+
         handVal += ONEPAIR;
         if (debug)
           printf("One pair %cs with a %c and a %c and a %c",
@@ -683,6 +770,8 @@ int scoreHand(struct cards hand[], int sortedValues[])
   /* hand if it has the highest valued card.                        */
   if (handVal == 0)
   {
+    totalHigh++;
+    
     if (debug)
       printf("High Card %c %c %c %c %c",getPrint(sortedValues[0]),
              getPrint(sortedValues[1]),getPrint(sortedValues[2]),

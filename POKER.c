@@ -34,10 +34,10 @@
 /*  2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King, Ace.             */
 /*                                                                  */
 /*  If two players have the same ranked hands then the rank made up */
-/*  of the highest value wins; for example, a pair of eights beats  */
+/*  of the highest value wins؛ for example, a pair of eights beats  */
 /*  a pair of fives. But if two ranks tie, for example, both        */
 /*  players have a pair of queens, then highest cards in each hand  */
-/*  are compared; if the highest cards tie then the next highest    */
+/*  are compared؛ if the highest cards tie then the next highest    */
 /*  cards are compared, and so on, until a winner is determined or  */
 /*  a tie is declared.                                              */
 /*                                                                  */
@@ -58,9 +58,9 @@
 /*                                                                  */
 /********************************************************************/
 
- FILE *inputFile; /* This data type describes the input data set    */
+ FILE *inputFile؛ /* This data type describes the input data set    */
 
- int debug = 0;   /* This flag controls extra debug data printed to */
+ int debug = 0؛   /* This flag controls extra debug data printed to */
                   /* the output file. Change it to 1, recompile,    */
                   /* and rerun the program to see loads of extra    */
                   /* data to help you along! Note that the program  */
@@ -69,9 +69,9 @@
                   /* correct.                                       */
 
  typedef struct cards {
-   char cardvalue;
-   char cardsuit;
- };               /* This struct (data structure) describes a       */
+   char cardvalue؛
+   char cardsuit؛
+ }؛               /* This struct (data structure) describes a       */
                   /* playing card. A card has a value (rank) and a  */
                   /* suit.                                          */
 
@@ -82,8 +82,9 @@
 /* The cards in the array can be indexed: array[0] is the first     */
 /* card in the hand and array[4] is the last card in the hand.      */
 /********************************************************************/
- struct cards p1cards[5];
- struct cards p2cards[5];
+ struct cards p1cards[5]؛
+ struct cards p2cards[5]؛
+ struct cards p3cards[5]؛
 
 /********************************************************************/
 /* The following are arrays that contain the post-processed poker   */
@@ -93,8 +94,9 @@
 /* contain and how they are used.                                   */
 /* There is one array per player.                                   */
 /********************************************************************/
- int p1SortedValues[5];
- int p2SortedValues[5];
+ int p1SortedValues[5]؛
+ int p2SortedValues[5]؛
+ int p3SortedValues[5]؛
 
 /********************************************************************/
 /* The following are int variables used to hold the "score" that    */
@@ -103,23 +105,24 @@
 /* lower value hand, but the particular score is unique to this     */
 /* program and has nothing to do with the actual game of poker.     */
 /********************************************************************/
- int p1Score;
- int p2Score;
+ int p1Score؛
+ int p2Score؛
+ int p3Score؛
 
 /********************************************************************/
 /* Global counter to Summary                                        */
 /********************************************************************/
- int totalHand          = 0;
- int totalRoyalFlush    = 0;
- int totalStraightFlush = 0;
- int totalFourKind      = 0;
- int totalFullHouse     = 0;
- int totalFlush         = 0;
- int ttlStraight        = 0;
- int totalThreeKind     = 0;
- int totalTwoPair       = 0;
- int totalOnePair       = 0;
- int totalHigh          = 0;
+ int totalHand          = 0؛
+ int totalRoyalFlush    = 0؛
+ int totalStraightFlush = 0؛
+ int totalFourKind      = 0؛
+ int totalFullHouse     = 0؛
+ int totalFlush         = 0؛
+ int ttlStraight        = 0؛
+ int totalThreeKind     = 0؛
+ int totalTwoPair       = 0؛
+ int totalOnePair       = 0؛
+ int totalHigh          = 0؛
 
 /********************************************************************/
 /* The following enumerations are used to match up named constants  */
@@ -140,10 +143,10 @@
 /* the four of a kind rank.                                         */
 /********************************************************************/
  enum {TWO=2, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK,
-       QUEEN, KING, ACE};
+       QUEEN, KING, ACE}؛
 
  enum {HIGHCARD=0, ONEPAIR, TWOPAIR, THREEKIND, STRAIGHT, FLUSH,
-       FULLHOUSE, FOURKIND, ROYAL};
+       FULLHOUSE, FOURKIND, ROYAL}؛
 
 /********************************************************************/
 /* The function called int main() is where the code begins executing*/
@@ -159,23 +162,26 @@ int main()
 /* function itself must appear in the file prior to any invocation  */
 /* of the function.                                                 */
 /********************************************************************/
-  int isRoyal(int values[]);
-  int isFlush(struct cards[]);
-  int isStraight(int values[]);
-  int getValue(char val);
-  char getPrint(int val);
-  void countCards(int values[], int sortedValues[], int frequency[]);
-  int scoreHand(struct cards[],int sortedValues[]);
-  int chooseWinner(int values0[],int score0, int values1[], int score1);
+  int isRoyal(int values[])؛
+  int isFlush(struct cards[])؛
+  int isStraight(int values[])؛
+  int getValue(char val)؛
+  char getPrint(int val)؛
+  void countCards(int values[], int sortedValues[], int frequency[])؛
+  int scoreHand(struct cards[],int sortedValues[])؛
+  int chooseWinner(int values0[],int score0, 
+                   int values1[], int score1, 
+                   int values2[], int score2)؛
 
 /********************************************************************/
 /* Following are a few variables that are local to int main().      */
 /********************************************************************/
-  int i;
-  char c;
-  int total = 0;
-  int p1wins = 0;
-  int p2wins = 0;
+  int i؛
+  char c؛
+  int total  = 0؛
+  int p1wins = 0؛
+  int p2wins = 0؛
+  int p3wins = 0؛
 
 /********************************************************************/
 /* Now that we're done defining prototypes and variables, let's get */
@@ -183,11 +189,11 @@ int main()
 /* You'll see that the DDNAME used in the JCL to run the program    */
 /* (INPUT) must match the DDNAME used to open the file here.        */
 /********************************************************************/
-  inputFile = fopen("DD:INPUT", "r");
+  inputFile = fopen("DD:INPUT", "r")؛
   if (inputFile == NULL)
     {
-      printf("open error:   %d/%s\n", errno, strerror(errno));
-      exit(98);
+      printf("open error:   %d/%s\n", errno, strerror(errno))؛
+      exit(98)؛
     }
 
 /********************************************************************/
@@ -196,9 +202,10 @@ int main()
 /* of input data. At that point the program will be finished.       */
 /********************************************************************/
   while (fscanf(inputFile,
-         "%s %s %s %s %s %s %s %s %s %s",
+         "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s",
          &p1cards[0],&p1cards[1],&p1cards[2],&p1cards[3],&p1cards[4],
-         &p2cards[0],&p2cards[1],&p2cards[2],&p2cards[3],&p2cards[4]
+         &p2cards[0],&p2cards[1],&p2cards[2],&p2cards[3],&p2cards[4],
+         &p3cards[0],&p3cards[1],&p3cards[2],&p3cards[3],&p3cards[4]
     ) != EOF) {   /* The while statement reads a record and stores  */
                   /* the data (cards) found on the record in a      */
                   /* series of variables (defined above). The body  */
@@ -219,9 +226,9 @@ int main()
                   /* information showing what data was read in for  */
                   /* player 1's hand                                */
        printf("\n\nPlayer 1: %.2s %.2s %.2s %.2s %.2s : ",
-         &p1cards[0],&p1cards[1],&p1cards[2],&p1cards[3],&p1cards[4]);
+         &p1cards[0],&p1cards[1],&p1cards[2],&p1cards[3],&p1cards[4])؛
      }            /* End of "if (debug)"                            */
-     p1Score = scoreHand(&p1cards[0],&p1SortedValues[0]);
+     p1Score = scoreHand(&p1cards[0],&p1SortedValues[0])؛
                   /* Analyze the hand and store the "score" in to   */
                   /* variable p1Score. Notice that the              */
                   /* p1SortedValues array, which was previously     */
@@ -237,16 +244,23 @@ int main()
 
      if (debug) { /* Do the same thing for player 2 now             */
        printf("Player 2: %.2s %.2s %.2s %.2s %.2s : ",
-         &p2cards[0],&p2cards[1],&p2cards[2],&p2cards[3],&p2cards[4]);
+         &p2cards[0],&p2cards[1],&p2cards[2],&p2cards[3],&p2cards[4])؛
      }            /* End of "if (debug)"                            */
-     p2Score = scoreHand(&p2cards[0],&p2SortedValues[0]);
+     p2Score = scoreHand(&p2cards[0],&p2SortedValues[0])؛
+
+     if (debug) { /* Do the same thing for player 3 now             */
+       printf("Player 3: %.2s %.2s %.2s %.2s %.2s : ",
+         &p3cards[0],&p3cards[1],&p3cards[2],&p3cards[3],&p3cards[4])؛
+     } 
+     p3Score = scoreHand(&p3cards[0],&p3SortedValues[0])؛
 
      if (debug) { /* If we're in debugging mode, display the scores */
-       printf("%d:%d; ",p1Score,p2Score);
+       printf("%d:%d:%d؛ ",p1Score,p2Score,p3Score)؛
      }
 
      if (chooseWinner(&p1SortedValues[0],p1Score,
-                      &p2SortedValues[0],p2Score) == 1)
+                      &p2SortedValues[0],p2Score,
+                      &p3SortedValues[0],p3Score) == 1)
      {            /* If player 1 is the winner, display an          */
                   /* indication of this. The chooseWinner routine   */
                   /* works by taking input data from two players and*/
@@ -254,15 +268,28 @@ int main()
                   /* players is the winner and returning a value    */
                   /* of zero if the second of the two players is the*/
                   /* winner.                                        */
-     /*printf("Player 1 wins!\n"); */
-      p1wins += 1;
+      p1wins += 1؛
+      if (debug)
+       printf("Player 1 win\n")؛
+
      }
-     else
+     else  if (chooseWinner(&p1SortedValues[0],p1Score,
+                            &p2SortedValues[0],p2Score,
+                            &p3SortedValues[0],p3Score) == 2)
      {
-     /*printf("Player 2 wins!\n");  */
-      p2wins += 1;
+      p2wins += 1؛
+      if (debug)
+        printf("Player 2 win\n")؛
      }
-     total  += 1;
+     else  if (chooseWinner(&p1SortedValues[0],p1Score,
+                            &p2SortedValues[0],p2Score,
+                            &p3SortedValues[0],p3Score) == 3)
+     {
+      p3wins += 1؛
+      if (debug)
+        printf("Player 3 win\n")؛
+     }
+     total  += 1؛
 
      /* The following code (which is all commented out for now)     */
      /* contains much of the code needed for the first programming  */
@@ -309,57 +336,60 @@ int main()
      /***************************************************************/
      /* Reset variables to zero before reading/processing next hand */
      /***************************************************************/
-     memset(p1SortedValues, 0, sizeof(p1SortedValues));
-     memset(p2SortedValues, 0, sizeof(p2SortedValues));
+     memset(p1SortedValues, 0, sizeof(p1SortedValues))؛
+     memset(p2SortedValues, 0, sizeof(p2SortedValues))؛
+     memset(p3SortedValues, 0, sizeof(p3SortedValues))؛
 
     /* Suck up anything left at the end of the current record and   */
     /* discard                                                      */
     do
     {
-      c = fgetc(inputFile);
-    } while ( c != '\n');
+      c = fgetc(inputFile)؛
+    } while ( c != '\n')؛
   }               /* End of loop that processes each record         */
 
-  printf("Arthur Henrique's Poker Program");
-  printf("\n\nSummary:\n");
-  printf("Total games: %d\n",total);
+  printf("Arthur Henrique's Poker Program")؛
+  printf("\n\nSummary:\n")؛
+  printf("Total games: %d\n",total)؛
   printf("Player 1 total wins: %d Percentage %d%%\n",p1wins,
-          p1wins*100/total);
+          p1wins*100/total)؛
   printf("Player 2 total wins: %d Percentage %d%%\n",p2wins,
-          p2wins*100/total);
+          p2wins*100/total)؛
+  printf("Player 3 total wins: %d Percentage %d%%\n",p3wins,
+          p3wins*100/total)؛
 
-  printf("\nHand Occurrences: \n");
-  printf("Total Hands Analyzed: %d\n",totalHand);
+  printf("\nHand Occurrences: \n")؛
+  printf("Total Hands Analyzed: %d\n",totalHand)؛
   printf("Royal Flushes: %d (%d%%) \n",totalRoyalFlush,
-          totalRoyalFlush*100/totalHand);
+          totalRoyalFlush*100/totalHand)؛
   printf("Straight Flushes: %d (%d%%)\n",totalStraightFlush,
-          totalStraightFlush*100/totalHand);
+          totalStraightFlush*100/totalHand)؛
   printf("Four of a Kinds: %d (%d%%) \n",totalFourKind,
-          totalFourKind*100/totalHand);
+          totalFourKind*100/totalHand)؛
   printf("Full Houses: %d (%d%%)\n",totalFullHouse,
-          totalFullHouse*100/totalHand);
+          totalFullHouse*100/totalHand)؛
   printf("Flushes: %d (%d%%)\n",totalFlush,
-          totalFlush*100/totalHand);
+          totalFlush*100/totalHand)؛
   printf("Straights: %d (%d%%)\n",ttlStraight,
-          ttlStraight*100/totalHand);
+          ttlStraight*100/totalHand)؛
   printf("Three of a Kinds: %d (%d%%)\n",totalThreeKind,
-          totalThreeKind*100/totalHand);
+          totalThreeKind*100/totalHand)؛
   printf("Two Pairs: %d (%d%%)\n",totalTwoPair,
-          totalTwoPair*100/totalHand);
+          totalTwoPair*100/totalHand)؛
   printf("One Pairs: %d (%d%%)\n",totalOnePair,
-          totalOnePair*100/totalHand);
+          totalOnePair*100/totalHand)؛
   printf("High Cards: %d (%d%%)\n",totalHigh,
-          totalHigh*100/totalHand);
+          totalHigh*100/totalHand)؛
 
 
 /********************************************************************/
 /*     Close input file                                             */
 /********************************************************************/
-  fclose(inputFile);
+  fclose(inputFile)؛
 /********************************************************************/
 /*     Return from the program                                      */
 /********************************************************************/
-  return 0;
+  return 0؛
 }
 /********************************************************************/
 /*  Royal Flush: Ten, Jack, Queen, King, Ace, in same suit.         */
@@ -367,21 +397,21 @@ int main()
 /********************************************************************/
 int isRoyal(int values[])
 {
-   int i;
-   int cardCount = 0;
+   int i؛
+   int cardCount = 0؛
 
-   for (i=TEN; i <= ACE ;i++)
+   for (i=TEN؛ i <= ACE ؛i++)
    {
       if (values[i]==1)
     {
-      cardCount++;
+      cardCount++؛
       if (cardCount==5)
-        return 1;
+        return 1؛
       }
       else
-      cardCount =  0;
+      cardCount =  0؛
    }
-   return 0;
+   return 0؛
 }
 /********************************************************************/
 /*                                                                  */
@@ -399,8 +429,8 @@ int isFlush(struct cards hand[])
       hand[0].cardsuit==hand[2].cardsuit &
       hand[0].cardsuit==hand[3].cardsuit &
       hand[0].cardsuit==hand[4].cardsuit)
-    return 1;
-  return 0;
+    return 1؛
+  return 0؛
 }
 
 /********************************************************************/
@@ -415,30 +445,30 @@ int isFlush(struct cards hand[])
 /********************************************************************/
 int isStraight(int values[])
 {
-  int i;
-  int cardCount;          /* How many consecutive neighboring       */
+  int i؛
+  int cardCount؛          /* How many consecutive neighboring       */
                           /* entries in the values array have been  */
                           /* found with a value of 1. If we get up  */
                           /* to five, then we know the hand is a    */
                           /* straight.                              */
 
   if (values[ACE]==1)     /* Account for the A-2-3-4-5 straight     */
-    cardCount = 1;
+    cardCount = 1؛
   else
-    cardCount = 0;
+    cardCount = 0؛
 
-  for (i=0;i<=ACE;i++)
+  for (i=0؛i<=ACE؛i++)
   {
     if (values[i]==1)
       {
-        cardCount++;
+        cardCount++؛
         if (cardCount == 5)
-          return 1;
+          return 1؛
       }
     else
-      cardCount = 0;      /* Back to zero cards in a row            */
+      cardCount = 0؛      /* Back to zero cards in a row            */
   }
-  return 0;
+  return 0؛
 }
 
 /********************************************************************/
@@ -451,32 +481,32 @@ int getValue(char val)
 {
 
   if (val=='A')
-    return ACE;
+    return ACE؛
   if (val=='K')
-    return KING;
+    return KING؛
   if (val=='Q')
-    return QUEEN;
+    return QUEEN؛
   if (val=='J')
-    return JACK;
+    return JACK؛
   if (val=='T')
-    return TEN;
+    return TEN؛
   if (val=='9')
-    return NINE;
+    return NINE؛
   if (val=='8')
-    return EIGHT;
+    return EIGHT؛
   if (val=='7')
-    return SEVEN;
+    return SEVEN؛
   if (val=='6')
-    return SIX;
+    return SIX؛
   if (val=='5')
-    return FIVE;
+    return FIVE؛
   if (val=='4')
-    return FOUR;
+    return FOUR؛
   if (val=='3')
-    return THREE;
+    return THREE؛
   if (val=='2')
-    return TWO;
-  return 0;
+    return TWO؛
+  return 0؛
 }
 
 /********************************************************************/
@@ -489,32 +519,32 @@ char getPrint(int val)
 {
 
   if (val==ACE)
-    return 'A';
+    return 'A'؛
   if (val==KING)
-    return 'K';
+    return 'K'؛
   if (val==QUEEN)
-    return 'Q';
+    return 'Q'؛
   if (val==JACK)
-    return 'J';
+    return 'J'؛
   if (val==TEN)
-    return 'T';
+    return 'T'؛
   if (val==NINE)
-    return '9';
+    return '9'؛
   if (val==EIGHT)
-    return '8';
+    return '8'؛
   if (val==SEVEN)
-    return '7';
+    return '7'؛
   if (val==SIX)
-    return '6';
+    return '6'؛
   if (val==FIVE)
-    return '5';
+    return '5'؛
   if (val==FOUR)
-    return '4';
+    return '4'؛
   if (val==THREE)
-    return '3';
+    return '3'؛
   if (val==TWO)
-    return '2';
-  return 'X';
+    return '2'؛
+  return 'X'؛
 }
 
 /********************************************************************/
@@ -558,49 +588,49 @@ char getPrint(int val)
 void countCards(int values[], int sortedValues[], int frequency[])
 {
 
-  int i,j;
+  int i,j؛
 
-  j = 0;
-  for (i=ACE;i>=TWO;i--)
+  j = 0؛
+  for (i=ACE؛i>=TWO؛i--)
   {
     if (values[i]==4)
     {
       /* Player got a 4 of a kind */
-      frequency[j] = 4;
-      sortedValues[j] = i;
-      j++;
+      frequency[j] = 4؛
+      sortedValues[j] = i؛
+      j++؛
     }
   }
 
-  for (i=ACE;i>=TWO;i--)
+  for (i=ACE؛i>=TWO؛i--)
   {
     if (values[i]==3)
     {
       /* Player got a 3 of a kind */
-      frequency[j] = 3;
-      sortedValues[j] = i;
-      j++;
+      frequency[j] = 3؛
+      sortedValues[j] = i؛
+      j++؛
     }
   }
-  for (i=ACE;i>=TWO;i--)
+  for (i=ACE؛i>=TWO؛i--)
   {
     if (values[i]==2)
     {
-      frequency[j] = 2;
-      sortedValues[j] = i;
-      j++;
+      frequency[j] = 2؛
+      sortedValues[j] = i؛
+      j++؛
     }
   }
-  for (i=ACE;i>=TWO;i--)
+  for (i=ACE؛i>=TWO؛i--)
   {
     if (values[i]==1)
     {
-      frequency[j] = 1;
-      sortedValues[j] = i;
-      j++;
+      frequency[j] = 1؛
+      sortedValues[j] = i؛
+      j++؛
     }
   }
-  return;
+  return؛
 }
 
 /********************************************************************/
@@ -615,9 +645,9 @@ void countCards(int values[], int sortedValues[], int frequency[])
 /********************************************************************/
 int scoreHand(struct cards hand[], int sortedValues[])
 {
-  int handVal = 0;        /* Return value - score for the hand      */
-  int i;
-  int values[15] = { 0 }; /* Values array - how many times each     */
+  int handVal = 0؛        /* Return value - score for the hand      */
+  int i؛
+  int values[15] = { 0 }؛ /* Values array - how many times each     */
                           /* card rank appears in the hand. The     */
                           /* first two items in this array          */
                           /* (values[0] and values[1] are not used  */
@@ -630,21 +660,21 @@ int scoreHand(struct cards hand[], int sortedValues[])
                           /* remember that arrays in C are zero-    */
                           /* origin, that is the first entry is     */
                           /* always array[0]).                      */
-  int frequency[5] = { 0 }; /* Frequency array - how many times     */
+  int frequency[5] = { 0 }؛ /* Frequency array - how many times     */
                           /* each entry in the sortedValues array   */
                           /* appears in the hand.                   */
 
-  for (i=0;i<=sizeof(hand);i++) /* For each card in the hand, tick  */
+  for (i=0؛i<=sizeof(hand)؛i++) /* For each card in the hand, tick  */
                           /* up the entry in the values array that  */
                           /* corresponds to the matching card rank. */
   {
-    values[getValue(hand[i].cardvalue)]++;
+    values[getValue(hand[i].cardvalue)]++؛
   }
 
   /* Now call countCards to generate the sortedValues and frequency */
   /* arrays. The prolog to countCards gives a few examples of how   */
   /* this works.                                                    */
-  countCards(&values[0],&sortedValues[0],&frequency[0]);
+  countCards(&values[0],&sortedValues[0],&frequency[0])؛
                           /* Note that an entire array is passed    */
                           /* to a function by passing the address   */
                           /* of the first entry (&array[0] is the   */
@@ -659,52 +689,54 @@ int scoreHand(struct cards hand[], int sortedValues[])
   /* it is a straight flush where the highest card is an ace) but   */
   /* that distinction is not (yet) made in the code.                */
 
-  totalHand++;
+  totalHand++؛
 
   if (isStraight(&values[0]) && !isRoyal(&values[0]))
   {
-    handVal += STRAIGHT;
+    ttlStraight++؛
+
+    handVal += STRAIGHT؛
     if (isFlush(&hand[0]))
     {
-      totalStraightFlush++;
+      totalStraightFlush++؛
 
-      handVal += FLUSH;
+      handVal += FLUSH؛
       if (debug)
         printf("Straight Flush, high card %c",
-               getPrint(sortedValues[0]));
+               getPrint(sortedValues[0]))؛
     }
     else
     {
-      ttlStraight++;
       if (debug)
-        printf("Straight, high card %c",getPrint(sortedValues[0]));
+        printf("Straight, high card %c",getPrint(sortedValues[0]))؛
     }
       
   }
   /* Royal Flush */
   else if (isRoyal(&values[0]))
   {
+    handVal += ROYAL؛  
+
     if (isFlush(&hand[0]))
     {
-      totalRoyalFlush++;
-      handVal += ROYAL;  
-      handVal += FLUSH;
+      totalRoyalFlush++؛
+      handVal += FLUSH؛
       if (debug)
         printf("Royal Flush, high card %c",
-               getPrint(sortedValues[0]));
+               getPrint(sortedValues[0]))؛
     }
     else
       if (debug)
-        printf("No Royal, high card %c",getPrint(sortedValues[0]));
+        printf("No Royal, high card %c",getPrint(sortedValues[0]))؛
   }
   /* Flush */
   else if (isFlush(&hand[0]))
   {
-    totalFlush++;
+    totalFlush++؛
 
-    handVal += FLUSH;
+    handVal += FLUSH؛
     if (debug)
-      printf("Flush, high card %c",getPrint(sortedValues[0]));
+      printf("Flush, high card %c",getPrint(sortedValues[0]))؛
   }
 
   /* After we see if the hand is a flush and/or a straight, we can  */
@@ -713,55 +745,55 @@ int scoreHand(struct cards hand[], int sortedValues[])
   /* clause: only one will be true                                  */
   if (frequency[0]==4)
   {
-    totalFourKind++;
+    totalFourKind++؛
 
-    handVal += FOURKIND;
+    handVal += FOURKIND؛
     if (debug)
-      printf("Four of a kind %c",getPrint(sortedValues[0]));
+      printf("Four of a kind %c",getPrint(sortedValues[0]))؛
   }
   else if (frequency[0]==3)
     {
       if (frequency[1]==2)
       {
-        totalFullHouse++;
+        totalFullHouse++؛
 
-        handVal += FULLHOUSE;
+        handVal += FULLHOUSE؛
         if (debug)
           printf("Full house %cs and %cs",getPrint(sortedValues[0]),
-                 getPrint(sortedValues[1]));
+                 getPrint(sortedValues[1]))؛
       }
       else
       {
-        totalThreeKind++;
+        totalThreeKind++؛
 
-        handVal += THREEKIND;
+        handVal += THREEKIND؛
         if (debug)
           printf("Three of a kind %cs with a %c and a %c",
                  getPrint(sortedValues[0]),getPrint(sortedValues[1]),
-                 getPrint(sortedValues[2]));
+                 getPrint(sortedValues[2]))؛
       }
     }
   else if (frequency[0]==2)
     {
       if (frequency[1]==2)
       {
-        totalTwoPair++;
+        totalTwoPair++؛
 
-        handVal += TWOPAIR;
+        handVal += TWOPAIR؛
         if (debug)
           printf("Two pair %cs and %cs with a %c",
                  getPrint(sortedValues[0]),getPrint(sortedValues[1]),
-                 getPrint(sortedValues[2]));
+                 getPrint(sortedValues[2]))؛
       }
       else
       {
-        totalOnePair++;
+        totalOnePair++؛
 
-        handVal += ONEPAIR;
+        handVal += ONEPAIR؛
         if (debug)
           printf("One pair %cs with a %c and a %c and a %c",
                  getPrint(sortedValues[0]),getPrint(sortedValues[1]),
-                 getPrint(sortedValues[2]),getPrint(sortedValues[3]));
+                 getPrint(sortedValues[2]),getPrint(sortedValues[3]))؛
       }
     }
 
@@ -770,18 +802,18 @@ int scoreHand(struct cards hand[], int sortedValues[])
   /* hand if it has the highest valued card.                        */
   if (handVal == 0)
   {
-    totalHigh++;
+    totalHigh++؛
     
     if (debug)
       printf("High Card %c %c %c %c %c",getPrint(sortedValues[0]),
              getPrint(sortedValues[1]),getPrint(sortedValues[2]),
-             getPrint(sortedValues[3]),getPrint(sortedValues[4]));
+             getPrint(sortedValues[3]),getPrint(sortedValues[4]))؛
   }
 
   if (debug)
-    printf("\n");
+    printf("\n")؛
   /* Return the value (score) of the hand                           */
-  return handVal;
+  return handVal؛
 
   }
 
@@ -800,27 +832,31 @@ int scoreHand(struct cards hand[], int sortedValues[])
 /* returns 1.                                                       */
 /* If the second value/score pair is the winner, then the subroutine*/
 /* returns 0.                                                       */
-/*                                                                  */
-/********************************************************************/
-int chooseWinner(int values0[],int score0,int values1[],int score1)
-{
-  int i;
+/*                                                                  *
 
-     if (score0 > score1) /* The first player had a better hand     */
-       return 1;
-     else if (score1 > score0) /* The second player had a better    */
-                          /* hand                                   */
-       return 0;
-     else                 /* The players had the same hand. Compare */
-                          /* values of the cards to determine       */
-                          /* winner.                                */
+int chooseWinner(int values0[],int score0,
+                 int values1[],int score1,
+                 int values2[],int score2)
+{
+  int i؛
+
+     if (score0 > score1 && score0 > score2) 
+       return 1؛
+     else if (score1 > score0 && score1 > score2)
+       return 2؛
+     else  if (score2 > score0 && score2 > score1)
+      return 3؛
+     else                 
      {
-       for (i=0;i<5;i++)
+       for (i=0؛i<5؛i++)
        {
-         if (values0[i]>values1[i])
-            return 1;
-         else if (values1[i]>values0[i])
-            return 0;
+         if (values0[i]>values1[i] && values0[i]>values2[i])
+            return 1؛
+         else if (values1[i]>values0[i] && values1[i]>values2[i])
+            return 2؛
+         else if (values2[i]>values0[i] && values2[i]>values1[i]) 
+          return 3؛
        }
      }
    }
+   *******************************************************************/
